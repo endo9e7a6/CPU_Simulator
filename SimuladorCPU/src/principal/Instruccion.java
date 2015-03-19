@@ -14,6 +14,8 @@ public class Instruccion {
 	                 //NOP:  0
 	                 //ADD:  1
 					 //MULT: 2
+					 //LW: 3
+	 				 //SW: 4
 	public int rA;
 	public int rB;
 	public int rC;

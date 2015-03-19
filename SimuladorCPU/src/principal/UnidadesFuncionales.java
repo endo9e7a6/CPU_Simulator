@@ -3,6 +3,7 @@ package principal;
 import java.util.ArrayList;
 
 public class UnidadesFuncionales {
+	public static int[] memoria=new int[1000];
 
 	public static boolean WB(ALU_WB alu_wb, int[] bancoRegistros){
 //		System.out.println("Soy WB, Datos:" + alu_wb)
@@ -12,6 +13,21 @@ public class UnidadesFuncionales {
 			return true;
 		bancoRegistros[alu_wb.rC] = alu_wb.C;
 		return true;
+	}
+	public static void MEM(ID_ALU id_alu, ALU_WB alu_wb){
+		
+		switch(id_alu.codOp){
+		case 3://lw
+			alu_wb.codOp=3;
+			alu_wb.C=memoria[id_alu.A];
+			break;
+		case 4://sw
+			alu_wb.codOp=0;
+			memoria[id_alu.rC]=id_alu.A;
+			break;
+
+		}
+		alu_wb.rC = id_alu.rC;
 	}
     public static void ALU(ID_ALU id_alu, ALU_WB alu_wb){
 
