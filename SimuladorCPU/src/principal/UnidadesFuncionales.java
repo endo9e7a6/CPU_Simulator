@@ -43,6 +43,7 @@ public class UnidadesFuncionales {
 		case 2://mult
 			alu_wb.C=id_alu.A * id_alu.B;
 			break;
+	
 		case 88://trap
 			
 		default:

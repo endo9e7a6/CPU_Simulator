@@ -33,26 +33,52 @@ public class Procesador {
 		if_id = new IF_ID();
 		System.out.println("Inicializado correctamente");
 	}
+	private boolean RAWDetector(){
+		if(id_alu.codOp != 0 && id_alu.codOp != 88 ){
+			if(if_id.rA == id_alu.rC){
+				System.out.println("RAW: if_id.rA == id_alu.rC");
+				return true;
+			}if(if_id.rB == id_alu.rC){
+				System.out.println("RAW: if_id.rB == id_alu.rC");
+				return true;
+			}
+		}
+		return false;
+		
+	}
 	
 	public void ejecuta(){
 		boolean status = true;
 		while(status){
 			System.out.println("PC: "+ pc);
-			//WB(ALU_WB, bancoRegistros) ¿CUANDO RECIBA TRAP a la mierda con status
-			status = UnidadesFuncionales.WB(alu_wb, bancoRegistros);
-			if (id_alu.codOp == 3 || id_alu.codOp == 4){
-				//MEM
-				UnidadesFuncionales.MEM(id_alu, alu_wb);
-			}else{
-				//ALU(ID_ALU, ALU_WB)
-				UnidadesFuncionales.ALU(id_alu, alu_wb);
-			}
+			if(RAWDetector()){//Riesgo RAW
+				status = UnidadesFuncionales.WB(alu_wb, bancoRegistros);
 				
-			//ID(IF_ID, ID_ALU, bancoRegistros
-			UnidadesFuncionales.ID(if_id, id_alu, bancoRegistros);
-			//IF(PC, bancoInstrucciones, IF_ID)
-			UnidadesFuncionales.IF(pc, if_id, bancoInstrucciones);
-			
+				if (id_alu.codOp == 3 || id_alu.codOp == 4){
+					//MEM
+					UnidadesFuncionales.MEM(id_alu, alu_wb);
+				}else{
+					//ALU(ID_ALU, ALU_WB)
+					UnidadesFuncionales.ALU(id_alu, alu_wb);
+				}
+				id_alu.codOp=0;
+				
+			}else{
+				//WB(ALU_WB, bancoRegistros) ¿CUANDO RECIBA TRAP a la mierda con status
+				status = UnidadesFuncionales.WB(alu_wb, bancoRegistros);
+				if (id_alu.codOp == 3 || id_alu.codOp == 4){
+					//MEM
+					UnidadesFuncionales.MEM(id_alu, alu_wb);
+				}else{
+					//ALU(ID_ALU, ALU_WB)
+					UnidadesFuncionales.ALU(id_alu, alu_wb);
+				}
+					
+				//ID(IF_ID, ID_ALU, bancoRegistros
+				UnidadesFuncionales.ID(if_id, id_alu, bancoRegistros);
+				//IF(PC, bancoInstrucciones, IF_ID)
+				UnidadesFuncionales.IF(pc, if_id, bancoInstrucciones);
+			}
 			pc++;
 		}
 	}
