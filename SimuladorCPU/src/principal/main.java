@@ -18,7 +18,6 @@ public class main {
 		
 		instrucciones.add(new Instruccion(1,1,1,1));//ADD
 		
-		//Aqui no caza nada...//
 		instrucciones.add(new Instruccion(1,1,1,1));//ADD
 		instrucciones.add(new Instruccion(2,2,2,5));//ADD
 		instrucciones.add(new Instruccion(1,1,2,6));//ADD
